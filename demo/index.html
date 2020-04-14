@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>simplemde-markdown-editor</title>
+	<link rel="stylesheet" href="../dist/simplemde.min.css">
+	<script src="../dist/simplemde.min.js"></script>
+	<link rel="stylesheet" href="../css/monokai_sublime.css">
+	<script src="../css/marked.min.js"></script>
+	<script src="../css/highlight.min.js"></script>
+</head>
+<body>
+	<textarea name="" id="myId" cols="30" rows="10"></textarea>
+
+	<script>
+		hljs.initHighlightingOnLoad();
+	    var rendererMD = new marked.Renderer();
+	    marked.setOptions({
+	        renderer: rendererMD,
+	        gfm: true,
+	        tables: true,
+	        breaks: false,
+	        pedantic: false,
+	        sanitize: false,
+	        smartLists: true,
+	        smartypants: false,
+	        highlight: function (code) {
+	            return hljs.highlightAuto(code).value;
+	        }
+	    });
+
+	    rendererMD.heading = function (text, level) {
+	        var escapedText = text.toLowerCase().replace(/[^\w]+/g, '-');
+	        return '<h' + level + '><a name="' +
+	            escapedText +
+	            '" class="anchor" href="#' +
+	            escapedText +
+	            '"><span class="header-link"></span></a>' +
+	            text + '</h' + level + '>';
+	    }
+
+		var simplemde = new SimpleMDE({
+			element: document.getElementById('myId'),
+			spellChecker: false,
+			previewRender: function (plainText) {
+	            return marked(plainText);
+	        }
+		});
+	</script>
+</body>
+</html>
